@@ -24,7 +24,7 @@ open_data_file(FileName) ->
 
 retrieve_last_entry_at(StreamID,At) ->
     {ok,File} = cake_stream_manager:stream_filename(StreamID),
-    Offset = get_indexed_offset(StreamID,At),
+    Offset = cake_offset_dichotomy:get_indexed_offset(StreamID,At),
     lager:debug("Offset from get_indexed_offset: ~p", [Offset]),
     DataFile = open_data_file(File),
     {ok,Offset} = file:position(DataFile,Offset),
@@ -56,7 +56,7 @@ retrieve_last_entry_at(DataFile,FoundData,At) ->
 
 simple_query(StreamID,From,To) ->
     {ok,File} = cake_stream_manager:stream_filename(StreamID),
-    Offset = get_indexed_offset(StreamID,From),
+    Offset = cake_offset_dichotomy:get_indexed_offset(StreamID,From),
     lager:debug("Offset from get_indexed_offset: ~p", [Offset]),
     DataFile = open_data_file(File),
     {ok,Offset} = file:position(DataFile,Offset),
@@ -96,7 +96,7 @@ simple_query(DataFile,FoundData,From,To) ->
 
 all_since_query(StreamID,From) ->
     {ok,File} = cake_stream_manager:stream_filename(StreamID),
-    Offset = get_indexed_offset(StreamID,From),
+    Offset = cake_offset_dichotomy:get_indexed_offset(StreamID,From),
     lager:debug("Offset from get_indexed_offset: ~p", [Offset]),
     DataFile = open_data_file(File),
     {ok,Offset} = file:position(DataFile,Offset),
